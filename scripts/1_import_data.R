@@ -30,12 +30,14 @@ quads <- read_csv("../data/keen_quads.csv") %>%
 kelp_transects <- kelp_sites %>%
   group_by(SITE, TRANSECT, YEAR, SP_CODE) %>%
   summarise(mean_wet_weight = mean(WET_WEIGHT, na.rm=T),
-            mean_dry_weight = mean(DRY_WEIGHT, na.rm=T),
+            median_dry_weight = median(DRY_WEIGHT, na.rm=T),
             median_wet_weight = median(WET_WEIGHT, na.rm=T),
             mean_dry_weight = median(DRY_WEIGHT, na.rm=T),
   ) %>%
   left_join(quads) %>%
   mutate(transect_mean_wet_weight = mean_wet_weight*COUNT,
-         transect_mean_dry_weight = mean_dry_weight*COUNT,
+         transect_median_dry_weight = median_dry_weight*COUNT,
          transect_median_wet_weight = median_wet_weight*COUNT,
          transect_mean_dry_weight = mean_dry_weight*COUNT)
+
+write_csv(kelp_transects, "../data/kelp_quads_biomass.csv")
